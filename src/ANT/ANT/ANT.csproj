@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ANT.Model\ANT.Model.csproj" />
+    </ItemGroup>
+
 </Project>
