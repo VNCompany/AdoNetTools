@@ -7,8 +7,20 @@ namespace ANT
         public string? FieldName { get; set; }
         
         public string? DBType { get; set; }
-        public bool IsNotNull { get; set;  } = false;
-        public bool IsPrimaryKey { get; set; } = false;
+        public bool IsNotNull { get; set; }
+
+        private bool isPrimaryKey;
+
+        public bool IsPrimaryKey
+        {
+            get => isPrimaryKey;
+            set
+            {
+                isPrimaryKey = value;
+                if (value)
+                    IsNotNull = true;
+            }
+        }
         
         public Type? ValueConverterType { get; set; }
 

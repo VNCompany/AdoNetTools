@@ -21,8 +21,4 @@
       <ProjectReference Include="..\ANT\ANT.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="TestEntities\" />
-    </ItemGroup>
-
 </Project>

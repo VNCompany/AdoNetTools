@@ -10,6 +10,7 @@ namespace ANT
     public static partial class ANTProvider
     {
         private static readonly Dictionary<string, DBEntityMetadata> _registeredClasses;
+
         static ANTProvider()
         {
             _InitializeDBTypesDictionary();
@@ -22,9 +23,9 @@ namespace ANT
                 propertyInfo.GetCustomAttribute<DBFieldAttribute>() ?? new DBFieldAttribute();
             
             fieldAttribute.FieldName ??= ANTProvider.CamelToSnake(propertyInfo.Name)!;
-            fieldAttribute.DBType ??= DBTypes.TryGetValue(propertyInfo.GetType().FullName ?? "_none", out string? value)
-                ? value
-                : throw new InvalidCastException("Unknown type");
+            fieldAttribute.DBType ??= GetDBType(propertyInfo.PropertyType) ??
+                                      throw new InvalidCastException(
+                                          $"Property `{propertyInfo.Name}` has unknown type");
 
             if (fieldAttribute.ValueConverterType == null)
                 fieldAttribute.ValueConverterType = typeof(ValueConverters.DefaultValueConverter);
@@ -54,7 +55,8 @@ namespace ANT
             foreach (PropertyInfo propertyInfo in entityType.GetProperties())
             {
                 // If property has atribute `DBIgnore` then skip it
-                if (propertyInfo.GetCustomAttribute<DBIgnoreAttribute>() != null)
+                if (propertyInfo.GetCustomAttribute<DBIgnoreAttribute>() != null
+                    || propertyInfo.Name == "Metadata")
                     continue;
                 
                 fieldMetadatas.Add(_InitializeFieldMetadata(propertyInfo));
@@ -66,6 +68,8 @@ namespace ANT
             return new DBEntityMetadata(entityType, tableName, fieldMetadatas);
         }
         
+        public static int RegisteredClassesCount => _registeredClasses.Count;
+
         public static void RegisterClass<T>() where T: IDBEntity
         {
             Type entityType = typeof(T);

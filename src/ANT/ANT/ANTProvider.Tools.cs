@@ -1,26 +1,39 @@
+using System;
 using System.Collections.Generic;
 
 namespace ANT
 {
     public static partial class ANTProvider
     {
-        public static readonly Dictionary<string, string> DBTypes = new Dictionary<string, string>();
+        public static readonly Dictionary<Type, string> DBTypes = new Dictionary<Type, string>();
 
         private static void _InitializeDBTypesDictionary()
         {
-            DBTypes.Add("System.Boolean", "BOOL");
-            DBTypes.Add("System.Byte", "TINYINT UNSIGNED");
-            DBTypes.Add("System.Char", "TINYINT UNSIGNED");
-            DBTypes.Add("System.Int16", "SMALLINT");
-            DBTypes.Add("System.UInt16", "SMALLINT UNSIGNED");
-            DBTypes.Add("System.Int32", "INT");
-            DBTypes.Add("System.UInt32", "INT UNSIGNED");
-            DBTypes.Add("System.Int64", "BIGINT");
-            DBTypes.Add("System.UInt64", "BIGINT UNSIGNED");
-            DBTypes.Add("System.Single", "FLOAT");
-            DBTypes.Add("System.Double", "DOUBLE");
-            DBTypes.Add("System.Decimal", "DECIMAL");
-            DBTypes.Add("System.DateTime", "DATETIME");
+            DBTypes.Add(typeof(Boolean), "BOOL");
+            DBTypes.Add(typeof(Byte), "TINYINT UNSIGNED");
+            DBTypes.Add(typeof(Char), "TINYINT UNSIGNED");
+            DBTypes.Add(typeof(Int16), "SMALLINT");
+            DBTypes.Add(typeof(UInt16), "SMALLINT UNSIGNED");
+            DBTypes.Add(typeof(Int32), "INT");
+            DBTypes.Add(typeof(UInt32), "INT UNSIGNED");
+            DBTypes.Add(typeof(Int64), "BIGINT");
+            DBTypes.Add(typeof(UInt64), "BIGINT UNSIGNED");
+            DBTypes.Add(typeof(Single), "FLOAT");
+            DBTypes.Add(typeof(Double), "DOUBLE");
+            DBTypes.Add(typeof(Decimal), "DECIMAL");
+            DBTypes.Add(typeof(DateTime), "DATETIME");
+            DBTypes.Add(typeof(String), "TEXT");
+        }
+        
+        public static string? GetDBType(Type type)
+        {
+            if (!DBTypes.TryGetValue(type, out var dbType)
+                && type.GenericTypeArguments.Length == 1)
+            {
+                DBTypes.TryGetValue(type.GenericTypeArguments[0], out dbType);
+            }
+            
+            return dbType;
         }
         
         public static string? CamelToSnake(string? input)
