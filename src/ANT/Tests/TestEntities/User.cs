@@ -13,7 +13,7 @@ public class User : DBEntity
     [DBField(DBType = "VARCHAR(64)", IsNotNull = true)]
     public string Password { get; set; } = null!;
     
-    public int? Description { get; set; }
+    public string? Description { get; set; }
     
     [DBField("reg_date", IsNotNull = true)]
     public DateTime RegisteredDateTime { get; set; }
