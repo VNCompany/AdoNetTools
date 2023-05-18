@@ -14,20 +14,23 @@ namespace ANT
                             ?? throw new InvalidOperationException(
                                 "Entity class is not registered in ANTProvider");
 
-
-        public void SetFieldValue(string fieldName, object? value)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public DBField? GetFieldValue(string fieldName)
         {
-            throw new System.NotImplementedException();
+            if (Metadata.FieldMetadatas.TryGetValue(fieldName, out DBFieldMetadata? fieldMetadata))
+                return new DBField(fieldName, fieldMetadata.PropertyInfo.GetValue(this),
+                    fieldMetadata.ValueConverterType);
+            return null;
         }
 
         public IEnumerable<KeyValuePair<string, DBField>> GetFields()
         {
-            throw new System.NotImplementedException();
+            foreach (var item in Metadata.FieldMetadatas)
+            {
+                yield return new KeyValuePair<string, DBField>(
+                    key: item.Key,
+                    value: new DBField(item.Key, item.Value.PropertyInfo.GetValue(this),
+                        item.Value.ValueConverterType));
+            }
         }
     }
 }

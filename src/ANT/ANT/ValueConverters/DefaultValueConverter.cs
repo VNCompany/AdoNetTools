@@ -10,7 +10,8 @@ namespace ANT.ValueConverters
             int ordinal = dataReader.GetOrdinal(fieldName);
             
             Type dataType = dataReader.GetFieldType(ordinal);
-            if (dataType.FullName == null) throw new InvalidOperationException("Invalid fieldType");
+            if (!fieldType.IsAssignableFrom(dataType))
+                throw new InvalidCastException("The field type and property type are different");
             object? dataValue = dataReader.GetValue(ordinal);
             
             return dataValue != DBNull.Value ? dataValue : null;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 
 using ANT.Model;
 
@@ -20,7 +21,7 @@ namespace ANT
             DBFieldAttribute fieldAttribute =
                 propertyInfo.GetCustomAttribute<DBFieldAttribute>() ?? new DBFieldAttribute();
             
-            fieldAttribute.FieldName ??= propertyInfo.Name;
+            fieldAttribute.FieldName ??= ANTProvider.CamelToSnake(propertyInfo.Name)!;
             fieldAttribute.DBType ??= DBTypes.TryGetValue(propertyInfo.GetType().FullName ?? "_none", out string? value)
                 ? value
                 : throw new InvalidCastException("Unknown type");
@@ -28,7 +29,7 @@ namespace ANT
             if (fieldAttribute.ValueConverterType == null)
                 fieldAttribute.ValueConverterType = typeof(ValueConverters.DefaultValueConverter);
             else if (!typeof(ValueConverters.IValueConverter).IsAssignableFrom(fieldAttribute.ValueConverterType))
-                throw new FormatException("THe ValueConverterType class is not a converter");
+                throw new FormatException("The ValueConverterType class is not a converter");
 
             return new DBFieldMetadata(
                 fieldAttribute.FieldName,
@@ -47,7 +48,7 @@ namespace ANT
                 entityAttribute.TableName != null)
                 tableName = entityAttribute.TableName;
             else
-                tableName = entityType.Name;
+                tableName = ANTProvider.CamelToSnake(entityType.Name)!;
 
             List<DBFieldMetadata> fieldMetadatas = new List<DBFieldMetadata>();
             foreach (PropertyInfo propertyInfo in entityType.GetProperties())
@@ -59,6 +60,9 @@ namespace ANT
                 fieldMetadatas.Add(_InitializeFieldMetadata(propertyInfo));
             }
 
+            if (fieldMetadatas.Count(m => m.IsPrimaryKey == true) == 0)
+                throw new InvalidOperationException("The entity must have a primary key property");
+            
             return new DBEntityMetadata(entityType, tableName, fieldMetadatas);
         }
         

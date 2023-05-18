@@ -1,3 +1,5 @@
+using System;
+
 namespace ANT.Model
 {
     public class DBField
@@ -5,10 +7,13 @@ namespace ANT.Model
         public string Name { get; }
         public object? Value { get; }
 
-        public DBField(string name, object? value)
+        public Type ValueConverterType { get; }
+
+        public DBField(string name, object? value, Type valueConverterType)
         {
             Name = name;
             Value = value;
+            ValueConverterType = valueConverterType;
         }
     }
 }

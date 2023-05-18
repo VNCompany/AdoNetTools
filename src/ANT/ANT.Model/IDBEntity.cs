@@ -6,7 +6,6 @@ namespace ANT.Model
     {
         DBEntityMetadata? Metadata { get; }
 
-        void SetFieldValue(string fieldName, object? value);
         DBField? GetFieldValue(string fieldName);
         IEnumerable<KeyValuePair<string, DBField>> GetFields();
     }
