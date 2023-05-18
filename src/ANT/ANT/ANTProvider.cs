@@ -24,7 +24,11 @@ namespace ANT
             fieldAttribute.DBType ??= DBTypes.TryGetValue(propertyInfo.GetType().FullName ?? "_none", out string? value)
                 ? value
                 : throw new InvalidCastException("Unknown type");
-            fieldAttribute.ValueConverterType = typeof(ANTProvider);  // TODO: Realize value converter
+
+            if (fieldAttribute.ValueConverterType == null)
+                fieldAttribute.ValueConverterType = typeof(ValueConverters.DefaultValueConverter);
+            else if (!typeof(ValueConverters.IValueConverter).IsAssignableFrom(fieldAttribute.ValueConverterType))
+                throw new FormatException("THe ValueConverterType class is not a converter");
 
             return new DBFieldMetadata(
                 fieldAttribute.FieldName,
@@ -78,11 +82,5 @@ namespace ANT
 
         public static DBEntityMetadata? GetEntityMetadata<T>() where T: IDBEntity
             => GetEntityMetadata(typeof(T));
-
-        public static string? CamelToSnake(string? input)
-        {
-            // TODO: Realize method "CamelToSnake"
-            return input;
-        }
     }
 }

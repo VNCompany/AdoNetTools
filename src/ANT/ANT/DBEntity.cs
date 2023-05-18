@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
+
 using ANT.Model;
 
 namespace ANT
 {
-    public class DBEntity : IDBEntity
+    public abstract class DBEntity : IDBEntity
     {
-        public DBEntityMetadata? Metadata { get; }
-        
-        
+        private DBEntityMetadata? metadata;
+
+        public DBEntityMetadata Metadata
+            => metadata ??= ANTProvider.GetEntityMetadata(this.GetType())
+                            ?? throw new InvalidOperationException(
+                                "Entity class is not registered in ANTProvider");
+
+
         public void SetFieldValue(string fieldName, object? value)
         {
             throw new System.NotImplementedException();

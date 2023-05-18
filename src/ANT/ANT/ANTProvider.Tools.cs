@@ -22,5 +22,11 @@ namespace ANT
             DBTypes.Add("System.Decimal", "DECIMAL");
             DBTypes.Add("System.DateTime", "DATETIME");
         }
+        
+        public static string? CamelToSnake(string? input)
+        {
+            // TODO: Realize method "CamelToSnake"
+            return input;
+        }
     }
 }
