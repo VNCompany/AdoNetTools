@@ -36,8 +36,20 @@ namespace ANT
         
         public static string? CamelToSnake(string? input)
         {
-            // TODO: Realize method "CamelToSnake"
-            return input;
+            if (string.IsNullOrWhiteSpace(input)) return input;
+            char[] ch = new Char[input.Length * 2];
+            int j = 0;
+            for (int i = 0; i < input.Length; i++, j++)
+            {
+                if (i == 0) { ch[0] = char.ToLower(input[i]); continue; }
+
+                if (char.IsUpper(input[i]))
+                    (ch[j++], ch[j]) = ('_', char.ToLower(input[i]));
+                else
+                    ch[j] = input[i];
+            }
+
+            return new string(ch, 0, j);
         }
     }
 }
