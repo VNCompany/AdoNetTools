@@ -1,35 +1,28 @@
 using System;
 
+using ANT.Model;
+using ANT.ValueConverters;
+
 namespace ANT
 {
     public class DBFieldAttribute : Attribute
     {
-        public string? FieldName { get; set; }
-        
-        public string? DBType { get; set; }
-        public bool IsNotNull { get; set; }
+        public DBFieldInfo Info { get; }
+        public Type ValueConverterType { get; set; } = typeof(DefaultValueConverter);
 
-        private bool isPrimaryKey;
-
-        public bool IsPrimaryKey
+        public DBFieldAttribute()
         {
-            get => isPrimaryKey;
-            set
-            {
-                isPrimaryKey = value;
-                if (value)
-                    IsNotNull = true;
-            }
+            Info = new();
         }
-        
-        public Type? ValueConverterType { get; set; }
 
-        public DBFieldAttribute() { }
-
-        public DBFieldAttribute(string? fieldName, string? dbType = null)
+        public DBFieldAttribute(string fieldName, string? dbType = null)
         {
-            FieldName = fieldName;
-            DBType = dbType;
+            Info = new()
+            {
+                FieldName = fieldName
+            };
+            if (dbType != null)
+                Info.DBType = dbType;
         }
     } 
 }

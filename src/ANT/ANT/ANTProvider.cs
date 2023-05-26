@@ -4,43 +4,45 @@ using System.Reflection;
 using System.Linq;
 
 using ANT.Model;
+using ANT.ValueConverters;
 
 namespace ANT
 {
     public static partial class ANTProvider
     {
-        private static readonly Dictionary<string, DBEntityMetadata> _registeredClasses;
+        private static readonly Dictionary<string, DBEntityMetadata> _registeredClasses =
+            new Dictionary<string, DBEntityMetadata>();
 
-        static ANTProvider()
+        private static DBFieldMetadata _InitializeFieldMetadata(IDictionary<Type, IValueConverter> converters,
+            PropertyInfo propertyInfo)
         {
-            _InitializeDBTypesDictionary();
-            _registeredClasses = new Dictionary<string, DBEntityMetadata>();
+            DBFieldAttribute? fieldAttribute = propertyInfo.GetCustomAttribute<DBFieldAttribute>();
+            if (fieldAttribute != null)
+            {
+                if (string.IsNullOrEmpty(fieldAttribute.Info.FieldName))
+                    fieldAttribute.Info.FieldName = CamelToSnake(propertyInfo.Name)!;
+                if (string.IsNullOrEmpty(fieldAttribute.Info.DBType))
+                    fieldAttribute.Info.DBType = GetDBType(propertyInfo.PropertyType) ??
+                                                 throw new InvalidCastException(
+                                                     $"Property `{propertyInfo.DeclaringType?.Name}`." +
+                                                     $"`{propertyInfo.Name}` has unknown type");
+
+                if (fieldAttribute.ValueConverterType == typeof(DefaultValueConverter))
+                    return new DBFieldMetadata(fieldAttribute.Info, propertyInfo, DefaultValueConverter.GetObject);
+                else
+                {
+                    if (!converters.TryGetValue(fieldAttribute.ValueConverterType, out IValueConverter? converterObject))
+                    {
+                        converterObject = (IValueConverter)Activator.CreateInstance(fieldAttribute.ValueConverterType)!;
+                        converters.Add(fieldAttribute.ValueConverterType, converterObject);
+                    }
+                    return new DBFieldMetadata(fieldAttribute.Info, propertyInfo, converterObject);
+                }
+            }
+            else
+                return new DBFieldMetadata(new DBFieldInfo(), propertyInfo, DefaultValueConverter.GetObject);
         }
 
-        private static DBFieldMetadata _InitializeFieldMetadata(PropertyInfo propertyInfo)
-        {
-            DBFieldAttribute fieldAttribute =
-                propertyInfo.GetCustomAttribute<DBFieldAttribute>() ?? new DBFieldAttribute();
-            
-            fieldAttribute.FieldName ??= ANTProvider.CamelToSnake(propertyInfo.Name)!;
-            fieldAttribute.DBType ??= GetDBType(propertyInfo.PropertyType) ??
-                                      throw new InvalidCastException(
-                                          $"Property `{propertyInfo.Name}` has unknown type");
-
-            if (fieldAttribute.ValueConverterType == null)
-                fieldAttribute.ValueConverterType = typeof(ValueConverters.DefaultValueConverter);
-            else if (!typeof(ValueConverters.IValueConverter).IsAssignableFrom(fieldAttribute.ValueConverterType))
-                throw new FormatException("The ValueConverterType class is not a converter");
-
-            return new DBFieldMetadata(
-                fieldAttribute.FieldName,
-                propertyInfo,
-                fieldAttribute.DBType,
-                fieldAttribute.IsNotNull,
-                fieldAttribute.IsPrimaryKey,
-                fieldAttribute.ValueConverterType);
-        }
-        
         private static DBEntityMetadata _InitializeEntityMetadata(Type entityType)
         {
             string tableName;
@@ -51,25 +53,23 @@ namespace ANT
             else
                 tableName = ANTProvider.CamelToSnake(entityType.Name)!;
 
+            Dictionary<Type, IValueConverter> valueConverters = new Dictionary<Type, IValueConverter>();
             List<DBFieldMetadata> fieldMetadatas = new List<DBFieldMetadata>();
             foreach (PropertyInfo propertyInfo in entityType.GetProperties())
             {
-                // If property has atribute `DBIgnore` then skip it
                 if (propertyInfo.GetCustomAttribute<DBIgnoreAttribute>() != null
                     || propertyInfo.Name == "Metadata")
                     continue;
                 
-                fieldMetadatas.Add(_InitializeFieldMetadata(propertyInfo));
+                fieldMetadatas.Add(_InitializeFieldMetadata(valueConverters, propertyInfo));
             }
 
-            if (fieldMetadatas.Count(m => m.IsPrimaryKey == true) == 0)
+            if (fieldMetadatas.Count(m => m.Info.IsPrimaryKey) == 0)
                 throw new InvalidOperationException("The entity must have a primary key property");
             
             return new DBEntityMetadata(entityType, tableName, fieldMetadatas);
         }
         
-        public static int RegisteredClassesCount => _registeredClasses.Count;
-
         public static void RegisterClass<T>() where T: IDBEntity
         {
             Type entityType = typeof(T);
@@ -87,8 +87,5 @@ namespace ANT
                 return value;
             return null;
         }
-
-        public static DBEntityMetadata? GetEntityMetadata<T>() where T: IDBEntity
-            => GetEntityMetadata(typeof(T));
     }
 }

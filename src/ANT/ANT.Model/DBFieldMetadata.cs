@@ -1,28 +1,20 @@
-using System;
 using System.Reflection;
 
 namespace ANT.Model
 {
     public class DBFieldMetadata
     {
-        public string FieldName { get; }
+        public DBFieldInfo Info { get; }
         public PropertyInfo PropertyInfo { get; }
-        
-        public string DBType { get; }
-        public bool IsNotNull { get; }
-        public bool IsPrimaryKey { get; }
-        
-        public Type ValueConverterType { get; }
+        public IValueConverter Converter { get; }
 
-        public DBFieldMetadata(string fieldName, PropertyInfo propertyInfo, string dbType, bool isNotNull, 
-            bool isPrimaryKey, Type valueConverterType)
+        public DBFieldMetadata(DBFieldInfo fieldInfo, PropertyInfo propertyInfo, IValueConverter converter)
         {
-            FieldName = fieldName;
+            Info = fieldInfo;
             PropertyInfo = propertyInfo;
-            DBType = dbType;
-            IsNotNull = isNotNull;
-            IsPrimaryKey = isPrimaryKey;
-            ValueConverterType = valueConverterType;
+            Converter = converter;
+            
+            Info.Freeze();
         }
     }
 }

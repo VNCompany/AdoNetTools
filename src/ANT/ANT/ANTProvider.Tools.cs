@@ -5,25 +5,23 @@ namespace ANT
 {
     public static partial class ANTProvider
     {
-        public static readonly Dictionary<Type, string> DBTypes = new Dictionary<Type, string>();
-
-        private static void _InitializeDBTypesDictionary()
+        public static readonly Dictionary<Type, string> DBTypes = new Dictionary<Type, string>
         {
-            DBTypes.Add(typeof(Boolean), "BOOL");
-            DBTypes.Add(typeof(Byte), "TINYINT UNSIGNED");
-            DBTypes.Add(typeof(Char), "TINYINT UNSIGNED");
-            DBTypes.Add(typeof(Int16), "SMALLINT");
-            DBTypes.Add(typeof(UInt16), "SMALLINT UNSIGNED");
-            DBTypes.Add(typeof(Int32), "INT");
-            DBTypes.Add(typeof(UInt32), "INT UNSIGNED");
-            DBTypes.Add(typeof(Int64), "BIGINT");
-            DBTypes.Add(typeof(UInt64), "BIGINT UNSIGNED");
-            DBTypes.Add(typeof(Single), "FLOAT");
-            DBTypes.Add(typeof(Double), "DOUBLE");
-            DBTypes.Add(typeof(Decimal), "DECIMAL");
-            DBTypes.Add(typeof(DateTime), "DATETIME");
-            DBTypes.Add(typeof(String), "TEXT");
-        }
+            { typeof(Boolean), "BOOL" },
+            { typeof(Byte), "TINYINT UNSIGNED" },
+            { typeof(Char), "TINYINT UNSIGNED" },
+            { typeof(Int16), "SMALLINT" },
+            { typeof(UInt16), "SMALLINT UNSIGNED" },
+            { typeof(Int32), "INT" },
+            { typeof(UInt32), "INT UNSIGNED" },
+            { typeof(Int64), "BIGINT" },
+            { typeof(UInt64), "BIGINT UNSIGNED" },
+            { typeof(Single), "FLOAT" },
+            { typeof(Double), "DOUBLE" },
+            { typeof(Decimal), "DECIMAL" },
+            { typeof(DateTime), "DATETIME" },
+            { typeof(String), "TEXT" },
+        };
         
         public static string? GetDBType(Type type)
         {

@@ -4,9 +4,8 @@ namespace ANT.Model
 {
     public interface IDBEntity
     {
-        DBEntityMetadata? Metadata { get; }
-
-        DBField? GetFieldValue(string fieldName);
-        IEnumerable<KeyValuePair<string, DBField>> GetFields();
+        DBEntityMetadata Metadata { get; }
+        void DBEntityImport(System.Data.Common.DbDataReader dbDataReader);
+        IReadOnlyDictionary<string, object> DBEntityExport();
     }
 }
