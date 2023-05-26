@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace ANT
 {
@@ -33,8 +35,33 @@ namespace ANT
             
             return dbType;
         }
+
+        private static readonly string[] __worldEndings = { "o", "i", "x", "z", "ch", "sh", "ss" };
+        private const string __consonantLetters = "bcdfjhjklmnpqrstvwxz";
+        private static string ModifyEntityName(string input)
+        {
+            if (input.Length > 1)
+            {
+                char[] ch = new char[input.Length + 2];
+                input.CopyTo(0, ch, 0, input.Length);
+                int chEndPtr = input.Length;
+
+                if (ch[chEndPtr - 1] == 'y' && __consonantLetters.Contains(ch[chEndPtr - 2]))
+                    ch[chEndPtr - 1] = 'i';
+                if (__worldEndings.Take(4).Contains(ch[chEndPtr - 1].ToString())
+                    || __worldEndings.Skip(4).Contains(new string(ch, chEndPtr - 2, 2)))
+                {
+                    ch[chEndPtr++] = 'e';
+                    ch[chEndPtr++] = 's';
+                }
+                else ch[chEndPtr++] = 's';
+
+                return CamelToSnake(new string(ch, 0, chEndPtr))!;
+            }
+            return CamelToSnake(input)!;
+        }
         
-        public static string? CamelToSnake(string? input)
+        private static string? CamelToSnake(string? input)
         {
             if (string.IsNullOrWhiteSpace(input)) return input;
             char[] ch = new Char[input.Length * 2];

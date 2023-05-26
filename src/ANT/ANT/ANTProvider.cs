@@ -51,7 +51,7 @@ namespace ANT
                 entityAttribute.TableName != null)
                 tableName = entityAttribute.TableName;
             else
-                tableName = ANTProvider.CamelToSnake(entityType.Name)!;
+                tableName = ANTProvider.ModifyEntityName(entityType.Name);
 
             Dictionary<Type, IValueConverter> valueConverters = new Dictionary<Type, IValueConverter>();
             List<DBFieldMetadata> fieldMetadatas = new List<DBFieldMetadata>();
