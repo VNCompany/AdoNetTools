@@ -19,10 +19,9 @@ namespace ANT
         {
             Info = new()
             {
-                FieldName = fieldName
+                FieldName = fieldName,
+                DBType = dbType
             };
-            if (dbType != null)
-                Info.DBType = dbType;
         }
     } 
 }

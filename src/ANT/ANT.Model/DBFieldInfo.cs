@@ -27,8 +27,8 @@ namespace ANT.Model
             }
         }
         
-        private string dbType = String.Empty;
-        public string DBType
+        private string? dbType = String.Empty;
+        public string? DBType
         {
             get => dbType;
             set

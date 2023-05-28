@@ -10,8 +10,14 @@ namespace ANT
 {
     public static partial class ANTProvider
     {
+        // Private
+        
         private static readonly Dictionary<string, DBEntityMetadata> _registeredClasses =
             new Dictionary<string, DBEntityMetadata>();
+        
+#nullable disable
+        private static IANTConfigurator Configuration;
+#nullable enable
 
         private static DBFieldMetadata _InitializeFieldMetadata(IDictionary<Type, IValueConverter> converters,
             PropertyInfo propertyInfo)
@@ -22,10 +28,7 @@ namespace ANT
                 if (string.IsNullOrEmpty(fieldAttribute.Info.FieldName))
                     fieldAttribute.Info.FieldName = CamelToSnake(propertyInfo.Name)!;
                 if (string.IsNullOrEmpty(fieldAttribute.Info.DBType))
-                    fieldAttribute.Info.DBType = GetDBType(propertyInfo.PropertyType) ??
-                                                 throw new InvalidCastException(
-                                                     $"Property `{propertyInfo.DeclaringType?.Name}`." +
-                                                     $"`{propertyInfo.Name}` has unknown type");
+                    fieldAttribute.Info.DBType = GetDBType(propertyInfo.PropertyType);
 
                 if (fieldAttribute.ValueConverterType == typeof(DefaultValueConverter))
                     return new DBFieldMetadata(fieldAttribute.Info, propertyInfo, DefaultValueConverter.GetObject);
@@ -70,6 +73,13 @@ namespace ANT
             return new DBEntityMetadata(entityType, tableName, fieldMetadatas);
         }
         
+        // Public
+
+        public static void Use(IANTConfigurator configurator)
+        {
+            Configuration = configurator;
+        }
+
         public static void RegisterClass<T>() where T: IDBEntity
         {
             Type entityType = typeof(T);
