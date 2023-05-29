@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ANT.Constructors\ANT.Constructors.csproj" />
       <ProjectReference Include="..\ANT.Model\ANT.Model.csproj" />
       <ProjectReference Include="..\ANT\ANT.csproj" />
     </ItemGroup>
