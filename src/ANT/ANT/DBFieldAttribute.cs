@@ -10,6 +10,18 @@ namespace ANT
         public DBFieldInfo Info { get; }
         public Type ValueConverterType { get; set; } = typeof(DefaultValueConverter);
 
+        public string FieldName
+        {
+            get => Info.FieldName;
+            set => Info.FieldName = value;
+        }
+
+        public string? DBType
+        {
+            get => Info.DBType;
+            set => Info.DBType = value;
+        }
+
         public DBFieldAttribute()
         {
             Info = new();

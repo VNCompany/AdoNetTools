@@ -86,5 +86,7 @@ namespace ANT.Model
                 customAttributes = value;
             }
         }
+
+        public override string ToString() => $"[{DBType}] {FieldName}";
     } 
 }

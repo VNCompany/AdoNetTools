@@ -43,7 +43,11 @@ namespace ANT
                 }
             }
             else
-                return new DBFieldMetadata(new DBFieldInfo(), propertyInfo, DefaultValueConverter.GetObject);
+                return new DBFieldMetadata(new DBFieldInfo()
+                {
+                    FieldName = CamelToSnake(propertyInfo.Name)!,
+                    DBType = GetDBType(propertyInfo.PropertyType)
+                }, propertyInfo, DefaultValueConverter.GetObject);
         }
 
         private static DBEntityMetadata _InitializeEntityMetadata(Type entityType)

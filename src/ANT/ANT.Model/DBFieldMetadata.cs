@@ -16,5 +16,7 @@ namespace ANT.Model
             
             Info.Freeze();
         }
+
+        public override string ToString() => Info.ToString();
     }
 }
