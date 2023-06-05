@@ -1,0 +1,33 @@
+@model AdsPortal.Models.User
+@{
+    ViewData["title"] = "Профиль";
+}
+
+@section Links
+{
+    <link rel="stylesheet" href="~/static/css/create_post.css">
+}
+
+<main>
+    <h2>Профиль:</h2>
+    <form method="post" class="new-post-form">
+        <label>Номер телефона:
+            <input type="text" name="phone" value="@Model.Phone" required>
+        </label>
+        <label>Эл. почта
+            <input type="text" name="email" placeholder="example@example.com" value="@Model.Email">
+        </label>
+        <label>Местоположение:
+            <input type="text" name="location" placeholder="г. Москва" value="@Model.Location">
+        </label>
+        <input type="submit" value="Сохранить">
+    </form>
+
+    <h3>Обновить пароль:</h3>
+    <form method="post" class="new-post-form" action="/Profile/UpdatePassword">
+        <label>Новый пароль:
+            <input type="password" name="newPassword" required>
+        </label>
+        <input type="submit" value="Сохранить">
+    </form>
+</main>

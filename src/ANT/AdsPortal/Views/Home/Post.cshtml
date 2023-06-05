@@ -1,0 +1,29 @@
+@model AdsPortal.Models.Post
+@{
+    ViewData["title"] = Model.Name;
+    var user = (AdsPortal.Models.User)ViewData["PostUser"]!; 
+}
+
+<main style="margin: 10px">
+    <h2>@Model.Name:</h2>
+    <img src="~/content/@Model.PictureFileName" alt="@Model.PictureFileName" style="max-width: 800px; max-height: 350px">
+    <h3>Цена: @Model.Price ₽</h3>
+    <h3>Описание:</h3>
+    <p>
+        @Model.Description
+    </p>
+    <h3>Контакты:</h3>
+    <p>Phone: @user.Phone</p>
+    <p>Email:
+        @if (user.Email != "")
+        {
+            <span>@user.Email</span>
+        }
+        else
+        {
+            <span>Не указан</span>
+        }
+    </p>
+    <h3>Местоположение:</h3>
+    <p>@Model.Location</p>
+</main>

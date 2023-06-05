@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANT", "ANT\ANT.csproj", "{2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANT.Constructors", "ANT.Constructors\ANT.Constructors.csproj", "{F8814E3C-F593-407A-B2C3-553072843497}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdsPortal", "AdsPortal\AdsPortal.csproj", "{F6F72C77-37AE-4037-9285-4009575A41A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{F8814E3C-F593-407A-B2C3-553072843497}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8814E3C-F593-407A-B2C3-553072843497}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8814E3C-F593-407A-B2C3-553072843497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6F72C77-37AE-4037-9285-4009575A41A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6F72C77-37AE-4037-9285-4009575A41A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6F72C77-37AE-4037-9285-4009575A41A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6F72C77-37AE-4037-9285-4009575A41A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

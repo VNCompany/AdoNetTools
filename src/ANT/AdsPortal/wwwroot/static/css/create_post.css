@@ -1,0 +1,11 @@
+main {
+    margin: 20px;
+}
+main > h2 {
+    margin-bottom: 15px;
+}
+
+.new-post-form > label{
+    display: block;
+    margin: 15px 0;
+}

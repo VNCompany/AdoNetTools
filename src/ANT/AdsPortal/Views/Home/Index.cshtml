@@ -1,0 +1,31 @@
+@model IEnumerable<AdsPortal.Models.Post>
+@{
+    ViewData["title"] = "Главная";
+}
+
+<main class="index-main">
+  <section id="posts">
+    @foreach (var post in Model)
+    {
+      <div class="post">
+        <img src="~/content/@post.PictureFileName" alt="@post.PictureFileName">
+        <a href="Home/Post/@post.Id">@post.Name</a>
+        <p class="post-price">@post.Price ₽</p>
+        <p class="post-location">@post.Location</p>
+      </div>
+    }
+  </section>
+
+  <section id="favorites-block" style="display: none">
+    <h4>Избранное</h4>
+
+    <div class="favorite-post">
+      <img class="favorite-post-image" src="~/content/2.jpg">
+      <div class="favorite-post-description">
+        <a href="#">Xbox One X 1tb 4K с дисководом</a>
+        <p class="post-price">20000 ₽</p>
+        <p class="post-location">г. Тамбов</p>
+      </div>
+    </div>
+  </section>
+</main>

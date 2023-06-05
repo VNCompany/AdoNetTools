@@ -1,0 +1,14 @@
+@model AdsPortal.ViewModels.CatalogViewModel
+@{
+    ViewData["title"] = "Каталог";
+}
+
+<main>
+    <h2>Категории объявлений:</h2>
+    <div class="cat-items">
+        @foreach (var (catId, catName) in Model)
+        {
+            <a href="/Home/Index?catId=@catId" class="cat-item">@catName</a>            
+        }
+    </div>
+</main>

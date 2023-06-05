@@ -1,0 +1,52 @@
+@model AdsPortal.ViewModels.CatalogViewModel
+@{
+    ViewData["title"] = "Новое объявление";
+    var user = (AdsPortal.Models.User)ViewData["User"]!;
+}
+
+@section Links
+{
+    <link rel="stylesheet" href="~/static/css/create_post.css">
+}
+
+<main>
+    <h2>Новое объявление:</h2>
+    <form method="post" class="new-post-form" enctype="multipart/form-data">
+        <label>
+            Изображение (размер файла не должен превышать 5 МБ): <br>
+            <input type="file" name="picture" id="picture">
+        </label>
+
+        <label>
+            Название:<br>
+            <input type="text" name="name" required>
+        </label>
+
+        <label>
+            Категория:<br>
+            <select name="catId" required>
+                @foreach (var (catId, catName) in Model)
+                {
+                    <option value="@catId">@catName</option>
+                }
+            </select>
+        </label>
+
+        <label>
+            Цена:<br>
+            <input type="number" value="0" name="price" required>
+        </label>
+
+        <label>
+            Описание:<br>
+            <textarea name="description" style="width: 400px; height: 200px"></textarea>
+        </label>
+
+        <label>
+            Местонахождение:<br>
+            <input type="text" value="@user.Location" name="location">
+        </label>
+
+        <input type="submit" value="Разместить объявление">
+    </form>
+</main>
