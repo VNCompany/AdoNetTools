@@ -4,7 +4,7 @@ namespace ANT.Model
 {
     public interface IQueryConstructor
     {
-        IDictionary<string, object?>? CommandParameters { get; }
+        IEnumerable<KeyValuePair<string, object?>> GetCommandParameters();
         string? Build();
     }
 }

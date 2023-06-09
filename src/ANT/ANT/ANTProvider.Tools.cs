@@ -1,22 +1,41 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+
+using ANT.Model;
 
 namespace ANT
 {
-    public static partial class ANTProvider
+    public static partial class ANTProvider  // .Tools
     {
-        public static string? GetDBType(Type type)
+        private static string? GetDBType(Type type)
         {
-            if (!Configuration.DBTypes.TryGetValue(type, out var dbType)
+            if (!ANTConfiguration.GetConfiguration().DBTypes.TryGetValue(type, out var dbType)
                 && type.GenericTypeArguments.Length == 1)
             {
-                Configuration.DBTypes.TryGetValue(type.GenericTypeArguments[0], out dbType);
+                ANTConfiguration.GetConfiguration().DBTypes.TryGetValue(type.GenericTypeArguments[0], out dbType);
             }
             
             return dbType;
         }
 
+        private static readonly Dictionary<Type, IValueConverter> __converters = new Dictionary<Type, IValueConverter>();
+        private static IValueConverter GetConverterInstance(Type valueConverterType)
+        {
+            if (__converters.TryGetValue(valueConverterType, out var conv))
+                return conv;
+
+            var obj = Activator.CreateInstance(valueConverterType);
+            if (obj is IValueConverter valueConverter)
+            {
+                __converters.Add(valueConverterType, valueConverter);
+                return valueConverter;
+            }
+            else
+                throw new InvalidCastException("Invalid valueConverterType");
+        }
+
+        #region ModifyEntityName
         private static readonly string[] __worldEndings = { "o", "i", "x", "z", "ch", "sh", "ss" };
         private const string __consonantLetters = "bcdfjhjklmnpqrstvwxz";
         private static string ModifyEntityName(string input)
@@ -59,5 +78,6 @@ namespace ANT
 
             return new string(ch, 0, j);
         }
+        #endregion
     }
 }

@@ -29,6 +29,6 @@ namespace ANT.Configurators
 
         public IReadOnlyDictionary<Type, string> DBTypes => dbTypes;
 
-        public string AutoIncrementDefinition => "AUTO_INCREMENT";
+        public string AutoIncrementDefinition => "AUTOINCREMENT";
     }
 }

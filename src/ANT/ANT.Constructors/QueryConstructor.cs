@@ -1,35 +1,36 @@
 using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using ANT.Model;
 
 namespace ANT.Constructors
 {
-    public class QueryConstructor : IQueryConstructor
+    public abstract class QueryConstructor : IQueryConstructor
     {
-        private readonly Dictionary<string, object?>? _params;
-
-        public IDictionary<string, object?>? CommandParameters => _params;
+        protected List<object> CommandParts { get; }
         
-        public List<object>? CommandParts { get; }
-
-        public QueryConstructor(bool withoutParameters, bool withoutBody = false)
+        [AllowNull]
+        protected Dictionary<string, object?> Params { get; init; }
+        
+        protected QueryConstructor(bool withoutParams = false)
         {
-            if (!withoutParameters)
-                _params = new Dictionary<string, object?>();
-            if (!withoutBody)
-                CommandParts = new List<object>();
+            CommandParts = new List<object>();
+
+            if (!withoutParams)
+                Params = new Dictionary<string, object?>();
         }
 
-        public QueryConstructor() : this(false) { }
+        public virtual IEnumerable<KeyValuePair<string, object?>> GetCommandParameters() =>
+            Params ?? Enumerable.Empty<KeyValuePair<string, object?>>();
 
         public virtual string? Build()
         {
-            if (CommandParts == null || CommandParts.Count == 0) return null;
+            if (CommandParts.Count == 0) return null;
 
             StringBuilder queryStringBuilder = new StringBuilder();
             queryStringBuilder.AppendJoin(' ', from o in CommandParts select o.ToString());
-
             return queryStringBuilder.ToString() + ';';
         }
     }

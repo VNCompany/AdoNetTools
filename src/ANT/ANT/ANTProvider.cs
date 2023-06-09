@@ -14,13 +14,8 @@ namespace ANT
         
         private static readonly Dictionary<string, DBEntityMetadata> _registeredClasses =
             new Dictionary<string, DBEntityMetadata>();
-        
-#nullable disable
-        private static IANTConfigurator Configuration;
-#nullable enable
 
-        private static DBFieldMetadata _InitializeFieldMetadata(IDictionary<Type, IValueConverter> converters,
-            PropertyInfo propertyInfo)
+        private static DBFieldMetadata _InitializeFieldMetadata(PropertyInfo propertyInfo)
         {
             DBFieldAttribute? fieldAttribute = propertyInfo.GetCustomAttribute<DBFieldAttribute>();
             if (fieldAttribute != null)
@@ -30,37 +25,29 @@ namespace ANT
                 if (string.IsNullOrEmpty(fieldAttribute.Info.DBType))
                     fieldAttribute.Info.DBType = GetDBType(propertyInfo.PropertyType);
 
-                if (fieldAttribute.ValueConverterType == typeof(DefaultValueConverter))
-                    return new DBFieldMetadata(fieldAttribute.Info, propertyInfo, DefaultValueConverter.GetObject);
-                else
-                {
-                    if (!converters.TryGetValue(fieldAttribute.ValueConverterType, out IValueConverter? converterObject))
-                    {
-                        converterObject = (IValueConverter)Activator.CreateInstance(fieldAttribute.ValueConverterType)!;
-                        converters.Add(fieldAttribute.ValueConverterType, converterObject);
-                    }
-                    return new DBFieldMetadata(fieldAttribute.Info, propertyInfo, converterObject);
-                }
+                return new DBFieldMetadata(fieldAttribute.Info, propertyInfo,
+                    GetConverterInstance(fieldAttribute.ValueConverterType));
             }
             else
-                return new DBFieldMetadata(new DBFieldInfo()
-                {
-                    FieldName = CamelToSnake(propertyInfo.Name)!,
-                    DBType = GetDBType(propertyInfo.PropertyType)
-                }, propertyInfo, DefaultValueConverter.GetObject);
+                return new DBFieldMetadata(
+                    new DBFieldInfo() 
+                    { 
+                        FieldName = CamelToSnake(propertyInfo.Name)!, 
+                        DBType = GetDBType(propertyInfo.PropertyType) 
+                    },
+                    propertyInfo, 
+                    GetConverterInstance(typeof(DefaultValueConverter)));
         }
 
         private static DBEntityMetadata _InitializeEntityMetadata(Type entityType)
         {
             string tableName;
-            DBEntityAttribute? entityAttribute;
-            if ((entityAttribute = entityType.GetCustomAttribute<DBEntityAttribute>()) != null &&
-                entityAttribute.TableName != null)
+            DBEntityAttribute? entityAttribute = entityType.GetCustomAttribute<DBEntityAttribute>();
+            if (entityAttribute is { TableName: not null })
                 tableName = entityAttribute.TableName;
             else
                 tableName = ANTProvider.ModifyEntityName(entityType.Name);
-
-            Dictionary<Type, IValueConverter> valueConverters = new Dictionary<Type, IValueConverter>();
+            
             List<DBFieldMetadata> fieldMetadatas = new List<DBFieldMetadata>();
             foreach (PropertyInfo propertyInfo in entityType.GetProperties())
             {
@@ -68,7 +55,7 @@ namespace ANT
                     || propertyInfo.Name == "Metadata")
                     continue;
                 
-                fieldMetadatas.Add(_InitializeFieldMetadata(valueConverters, propertyInfo));
+                fieldMetadatas.Add(_InitializeFieldMetadata(propertyInfo));
             }
 
             if (fieldMetadatas.Count(m => m.Info.IsPrimaryKey) == 0)
@@ -79,9 +66,9 @@ namespace ANT
         
         // Public
 
-        public static void Use(IANTConfigurator configurator)
+        public static void Configure(IANTConfigurator configurator)
         {
-            Configuration = configurator;
+            ANTConfiguration.Configurator = configurator;
         }
 
         public static void RegisterClass<T>() where T: IDBEntity

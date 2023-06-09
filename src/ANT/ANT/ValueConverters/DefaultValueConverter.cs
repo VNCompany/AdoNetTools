@@ -7,14 +7,12 @@ namespace ANT.ValueConverters
 {
     public class DefaultValueConverter : IValueConverter
     {
-        public static readonly DefaultValueConverter GetObject = new DefaultValueConverter();
-        
-        public virtual object? ConvertTo(DbDataReader dataReader, string fieldName, Type fieldType)
+        public virtual object? ConvertTo(DbDataReader dataReader, string fieldName, Type _)
         {
             object? dataValue = dataReader.GetValue(dataReader.GetOrdinal(fieldName));
             return dataValue != DBNull.Value ? dataValue : null;
         }
 
-        public virtual object ConvertFrom(object? fieldValue, Type fieldType) => fieldValue ?? DBNull.Value;
+        public virtual object ConvertFrom(object? fieldValue, Type _) => fieldValue ?? DBNull.Value;
     }
 }
