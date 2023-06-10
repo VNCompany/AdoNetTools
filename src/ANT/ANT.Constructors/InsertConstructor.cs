@@ -1,38 +1,37 @@
-using System;
 using System.Collections.Generic;
-using ANT.Constructors.QueryParts;
+using System.Linq;
+using ANT.Model;
 
 namespace ANT.Constructors
 {
-    public class InsertConstructor : QueryConstructor
+    public class InsertConstructor : IQueryConstructor
     {
-#nullable disable
-        private ValuesCollection _keys, _values;
-#nullable restore
+        private readonly string _table;
+        private readonly string[] _fields;
+        private readonly ValuesCollection[] _values;
         
-        private void Init(string tableName)
+        public InsertConstructor(string tableName, IEnumerable<string> fieldNames, ValuesCollection values)
         {
-            _keys = new ValuesCollection();
-            _values = new ValuesCollection();
-            _values.Config.Start = _values.Config.End = String.Empty;
-            
-            CommandParts.Add($"INSERT INTO `{tableName}`");
-            CommandParts.Add(_keys);
-            CommandParts.Add("VALUES");
-            CommandParts.Add(_values);
+            _table = tableName;
+            _fields = fieldNames.ToArray();
+            _values = new[] { values };
         }
 
-        public InsertConstructor(string tableName, IEnumerable<string> fieldNames, IEnumerable<object?> fieldValues)
+        public InsertConstructor(string tableName, IEnumerable<string> fieldNames, IEnumerable<ValuesCollection> values)
         {
-            Init(tableName);
-            _keys.AddRange(fieldNames);
-            _values.Add(new ValuesCollection(fieldValues));
+            _table = tableName;
+            _fields = fieldNames.ToArray();
+            _values = values.ToArray();
+        }
+        
+        public IEnumerable<KeyValuePair<string, object?>> GetCommandParameters()
+        {
+            return Enumerable.Empty<KeyValuePair<string, object?>>();
         }
 
-        public InsertConstructor(string tableName, IEnumerable<string> fieldNames,
-            IEnumerable<IEnumerable<object?>> fieldValuesCollection)
+        public string? Build()
         {
-            
+            return null;
         }
     }
 }

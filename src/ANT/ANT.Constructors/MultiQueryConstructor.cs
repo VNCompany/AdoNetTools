@@ -26,7 +26,7 @@ namespace ANT.Constructors
             foreach (var constructor in _constructors)
             {
                 foreach (var (paramName, paramValue) in constructor.GetCommandParameters())
-                    result.Add(new KeyValuePair<string, object?>($"p{prefix}_{paramName}", paramValue));
+                    result.Add(new KeyValuePair<string, object?>($"q{prefix}_{paramName}", paramValue));
                 prefix++;
             }
 
