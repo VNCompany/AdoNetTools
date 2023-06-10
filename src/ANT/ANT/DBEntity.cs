@@ -1,8 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
 using ANT.Model;
+using ANT.Model.Data;
+using ANT.Model.Data.MappingModels;
 
 namespace ANT
 {
@@ -29,19 +30,17 @@ namespace ANT
             }
         }
 
-        public IReadOnlyDictionary<string, object> DBEntityExport()
+        public IReadOnlyDictionary<string, EntityFieldData> DBEntityExport()
         {
-            Dictionary<string, object> result = new Dictionary<string, object>();
+            var result = new Dictionary<string, EntityFieldData>();
             foreach (var (fieldName, fieldMeta) in Metadata.FieldMetadatas)
             {
-                if (fieldMeta.Info.IsAuto) continue;
-                
                 var convertedValue = fieldMeta.Converter.ConvertFrom(
                     fieldMeta.PropertyInfo.GetValue(this),
                     fieldMeta.PropertyInfo.PropertyType);
-                result.Add(fieldName, convertedValue);
+                result.Add(fieldName, new EntityFieldData(fieldName, fieldMeta.Info, convertedValue));
             }
-            
+
             return result;
         }
     }

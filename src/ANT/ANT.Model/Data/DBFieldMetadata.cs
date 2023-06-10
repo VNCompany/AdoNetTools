@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace ANT.Model
+namespace ANT.Model.Data
 {
     public class DBFieldMetadata
     {

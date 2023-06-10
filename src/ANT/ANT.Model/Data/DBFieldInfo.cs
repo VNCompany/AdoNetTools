@@ -1,6 +1,6 @@
 using System;
 
-namespace ANT.Model
+namespace ANT.Model.Data
 {
     public class DBFieldInfo : IFreezable, ICloneable
     {

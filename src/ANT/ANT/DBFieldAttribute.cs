@@ -1,6 +1,6 @@
 using System;
 
-using ANT.Model;
+using ANT.Model.Data;
 using ANT.ValueConverters;
 
 namespace ANT

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace ANT.Model
+namespace ANT.Model.Data
 {
     public class DBEntityMetadata
     {

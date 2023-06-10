@@ -13,6 +13,6 @@ namespace ANT.ValueConverters
             return dataValue != DBNull.Value ? dataValue : null;
         }
 
-        public virtual object ConvertFrom(object? fieldValue, Type _) => fieldValue ?? DBNull.Value;
+        public virtual object? ConvertFrom(object? fieldValue, Type _) => fieldValue;
     }
 }
