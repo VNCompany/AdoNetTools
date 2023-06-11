@@ -9,6 +9,8 @@ namespace ANT.Constructors
     {
         private readonly IEnumerable<IQueryConstructor> _constructors;
 
+        public string ParametersPrefix { get; set; } = string.Empty;
+
         public MultiQueryConstructor(IEnumerable<IQueryConstructor> queryConstructors)
         {
             _constructors = queryConstructors;
@@ -25,8 +27,9 @@ namespace ANT.Constructors
             int prefix = 1;
             foreach (var constructor in _constructors)
             {
+                constructor.ParametersPrefix = $"@__c{prefix}";
                 foreach (var (paramName, paramValue) in constructor.GetCommandParameters())
-                    result.Add(new KeyValuePair<string, object?>($"q{prefix}_{paramName}", paramValue));
+                    result.Add(new KeyValuePair<string, object?>(paramName, paramValue));
                 prefix++;
             }
 
