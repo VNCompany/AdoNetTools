@@ -30,11 +30,16 @@ namespace ANT
             }
         }
 
-        public IReadOnlyDictionary<string, EntityFieldData> DBEntityExport()
+        public IReadOnlyDictionary<string, EntityFieldData> DBEntityExport(
+            IEnumerable<string>? exportedProperties = null)
         {
+            HashSet<string>? exportProps = exportedProperties != null ? new HashSet<string>(exportedProperties) : null;
             var result = new Dictionary<string, EntityFieldData>();
             foreach (var (fieldName, fieldMeta) in Metadata.FieldMetadatas)
             {
+                if (exportProps != null && exportProps.Contains(fieldName))
+                    continue;
+                
                 var convertedValue = fieldMeta.Converter.ConvertFrom(
                     fieldMeta.PropertyInfo.GetValue(this),
                     fieldMeta.PropertyInfo.PropertyType);

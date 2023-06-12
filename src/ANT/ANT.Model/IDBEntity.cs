@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using ANT.Model.Data;
+using ANT.Model.Data.MappingModels;
 
 namespace ANT.Model
 {
@@ -8,6 +9,6 @@ namespace ANT.Model
     {
         DBEntityMetadata Metadata { get; }
         void DBEntityImport(System.Data.Common.DbDataReader dbDataReader);
-        IReadOnlyDictionary<string, Data.MappingModels.EntityFieldData> DBEntityExport();
+        IReadOnlyDictionary<string, EntityFieldData> DBEntityExport(IEnumerable<string>? exportedProperties = null);
     }
 }

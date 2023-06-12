@@ -49,7 +49,7 @@ namespace ANT.Constructors
             if (row < 0 || row >= RowsCount) throw new IndexOutOfRangeException("row");
             if (field < 0 || field >= Fields.Length) throw new IndexOutOfRangeException("field");
 
-            return $"f{row + 1}_{_fields[field]}";
+            return $"f{row}_{_fields[field]}";
         }
 
         public void AddValuesRange(IEnumerable<IEnumerable<object?>> values)

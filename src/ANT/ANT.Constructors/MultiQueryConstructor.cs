@@ -24,10 +24,10 @@ namespace ANT.Constructors
         public IEnumerable<KeyValuePair<string, object?>> GetCommandParameters()
         {
             List<KeyValuePair<string, object?>> result = new List<KeyValuePair<string, object?>>();
-            int prefix = 1;
+            int prefix = 0;
             foreach (var constructor in _constructors)
             {
-                constructor.ParametersPrefix = $"@__c{prefix}";
+                constructor.ParametersPrefix = $"@__c{prefix}_";
                 foreach (var (paramName, paramValue) in constructor.GetCommandParameters())
                     result.Add(new KeyValuePair<string, object?>(paramName, paramValue));
                 prefix++;

@@ -10,4 +10,10 @@
       <PackageReference Include="MySql.Data" Version="8.0.33" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ANT.Constructors\ANT.Constructors.csproj" />
+      <ProjectReference Include="..\ANT.Model\ANT.Model.csproj" />
+      <ProjectReference Include="..\ANT\ANT.csproj" />
+    </ItemGroup>
+
 </Project>

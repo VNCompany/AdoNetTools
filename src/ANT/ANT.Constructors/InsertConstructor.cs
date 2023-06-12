@@ -11,14 +11,13 @@ namespace ANT.Constructors
     public class InsertConstructor : IQueryConstructor
     {
         private readonly InsertConstructorData _data;
+        private readonly string _tableName;
 
         public string ParametersPrefix { get; set; } = "@__";
         
-        public string TableName { get; }
-
         public InsertConstructor(string tableName, InsertConstructorData data)
         {
-            TableName = tableName;
+            _tableName = tableName;
             _data = data;
         }
         
@@ -34,7 +33,7 @@ namespace ANT.Constructors
 
         public string? Build()
         {
-            StringBuilder qstr = new StringBuilder($"INSERT INTO `{TableName}`(`");
+            StringBuilder qstr = new StringBuilder($"INSERT INTO `{_tableName}`(`");
             qstr.AppendJoin("`,`", _data.Fields);
             qstr.Append("`) VALUES ");
 
@@ -73,9 +72,11 @@ namespace ANT.Constructors
             foreach (var item in itemsList)
             {
                 var itemDict = item.DBEntityExport();
+                
                 object?[] itemBuffer = new object?[icd.Fields.Length];
                 for (int i = 0; i < itemBuffer.Length; i++)
-                    itemBuffer[i] = itemDict[icd.Fields[i]];
+                    itemBuffer[i] = itemDict[icd.Fields[i]].Value;
+                
                 icd.AddValues(itemBuffer);
             }
 
