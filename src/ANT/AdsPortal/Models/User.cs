@@ -1,17 +1,23 @@
+using ANT;
+
 namespace AdsPortal.Models;
 
-public class User
+public class User : DBEntity
 {
-    public uint Id { get; set; }
-    public string Phone { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public string Role { get; set; }
-    public string Location { get; set; }
+    [DBPrimaryKey] public uint Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string Phone { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public string Role { get; set; } = null!;
+    public string Location { get; set; } = null!;
 
-    public User(uint id, string phone, string email, string password, string role, string location)
+    public User() { }
+
+    public User(uint id, string name, string phone, string email, string password, string role, string location)
     {
         Id = id;
+        Name = name; 
         Phone = phone;
         Email = email;
         Password = password;

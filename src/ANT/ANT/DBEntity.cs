@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 
 using ANT.Model;
 using ANT.Model.Data;
@@ -21,12 +22,16 @@ namespace ANT
             }
         }
 
-        public void DBEntityImport(System.Data.Common.DbDataReader dbDataReader)
+        public void DBEntityImport(DbDataReader dbDataReader, SqlFields? selectedFields = null)
         {
-            foreach (var (fieldName, fieldMeta) in Metadata.FieldMetadatas)
+            IEnumerable<string> fieldNames = selectedFields ?? Metadata.FieldMetadatas.Keys;
+            foreach (var fieldName in fieldNames)
             {
-                fieldMeta.PropertyInfo.SetValue(this, fieldMeta.Converter.ConvertTo(
-                    dbDataReader, fieldName, fieldMeta.PropertyInfo.PropertyType));
+                var meta = Metadata.FieldMetadatas[fieldName];
+                object? value = meta.Converter.ConvertTo(
+                    dbDataReader.GetValue(dbDataReader.GetOrdinal(fieldName)),
+                    meta.PropertyInfo.PropertyType);
+                meta.PropertyInfo.SetValue(this, value);
             }
         }
 

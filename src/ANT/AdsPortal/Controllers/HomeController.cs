@@ -18,7 +18,16 @@ public class HomeController : Controller
         var user = this.LoginByCookie();
         if (user is not null)
             ViewData["User"] = user;
-        return View(_db.GetPosts());
+
+        uint? catId = null;
+        string? filter = null;
+        if (Request.Query.TryGetValue("catId", out var catIdStr)
+            && uint.TryParse(catIdStr, out var catIdQuery))
+            catId = catIdQuery;
+        else if (Request.Query.TryGetValue("q", out var q))
+            filter = q; 
+        
+        return View(_db.Posts.GetAll(catId, filter));
     }
 
     public IActionResult Catalog()
@@ -26,7 +35,7 @@ public class HomeController : Controller
         var user = this.LoginByCookie();
         if (user is not null)
             ViewData["User"] = user;
-        return View(_db.GetCatalog());
+        return View(_db.Posts.GetCatalog());
     }
     
     public IActionResult Post(uint? id)
@@ -37,10 +46,9 @@ public class HomeController : Controller
         
         if (id is null) return StatusCode(409);
         
-        var post = _db.GetPost(id.Value);
+        var post = _db.Posts.Get(id.Value);
         if (post is null) return StatusCode(404);
         
-        ViewData["PostUser"] = _db.GetUserById(post.UserId);
         return View(post);
     }
 }

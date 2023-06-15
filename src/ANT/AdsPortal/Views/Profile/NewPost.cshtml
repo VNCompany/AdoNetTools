@@ -1,6 +1,7 @@
-@model AdsPortal.ViewModels.CatalogViewModel
 @{
     ViewData["title"] = "Новое объявление";
+    var categories = (ViewData["categories"] as IEnumerable<(uint, string)>) 
+                     ?? throw new NullReferenceException("categories");
     var user = (AdsPortal.Models.User)ViewData["User"]!;
 }
 
@@ -10,13 +11,8 @@
 }
 
 <main>
-    <h2>Новое объявление:</h2>
     <form method="post" class="new-post-form" enctype="multipart/form-data">
-        <label>
-            Изображение (размер файла не должен превышать 5 МБ): <br>
-            <input type="file" name="picture" id="picture">
-        </label>
-
+        <h2>Новое объявление:</h2>
         <label>
             Название:<br>
             <input type="text" name="name" required>
@@ -25,7 +21,7 @@
         <label>
             Категория:<br>
             <select name="catId" required>
-                @foreach (var (catId, catName) in Model)
+                @foreach (var (catId, catName) in categories)
                 {
                     <option value="@catId">@catName</option>
                 }
@@ -39,12 +35,19 @@
 
         <label>
             Описание:<br>
-            <textarea name="description" style="width: 400px; height: 200px"></textarea>
+            <textarea name="description" style="height: 200px"></textarea>
         </label>
 
         <label>
             Местонахождение:<br>
             <input type="text" value="@user.Location" name="location">
+        </label>
+        
+        <p class="file-description">
+            Изображения:
+        </p>
+        <label class="label-select-file">
+            <input type="file" name="imageFiles" id="imageFiles" multiple>
         </label>
 
         <input type="submit" value="Разместить объявление">

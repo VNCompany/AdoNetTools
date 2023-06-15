@@ -8,8 +8,10 @@
     @foreach (var post in Model)
     {
       <div class="post">
-        <img src="~/content/@post.PictureFileName" alt="@post.PictureFileName">
-        <a href="Home/Post/@post.Id">@post.Name</a>
+        <div class="image-container">
+          <img src="~/content/@post.MainPicture" alt="@post.MainPicture">
+        </div>
+        <a href="/Home/Post/@post.Id">@post.Name</a>
         <p class="post-price">@post.Price ₽</p>
         <p class="post-location">@post.Location</p>
       </div>

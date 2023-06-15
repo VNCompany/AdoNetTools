@@ -12,7 +12,7 @@ public static class ControllerExtensions
             && controller.Request.Cookies.TryGetValue("password", out var password))
         {
             var context = controller.HttpContext.RequestServices.GetRequiredService<DbContext>();
-            return context.Login(phone!, password!);
+            return context.Users.Get(phone!, password!);
         }
 
         return null;

@@ -11,9 +11,20 @@
     box-shadow: 2px 4px 5px dimgray;
 }
 
-.post > img {
-    display: block;
+.post > .image-container {
+    width: 218px;
+    height: 218px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+}
+
+.post > .image-container > img {
     width: 100%;
+    object-position: center;
+    object-fit: cover;
+    max-height: 218px;
 }
 
 .post-price, .post-location {

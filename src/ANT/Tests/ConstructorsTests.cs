@@ -92,21 +92,6 @@ public class ConstructorsTests
             new User() { Id = 1, Login = "admin", Password = "qwerty" },
             new User() { Id = 2, Login = "victor", Password = "123456" }
         };
-        
-        var constructor = UpdateConstructor
-            .CreateFromEntity(items[0])
-            .Where("`login`=@login", ("@login", "admin"));
-        
-        constructor.Build(); // UPDATE `users` SET `id`=@__id, `login`=@__login, `password`=@__password WHERE `login`=@login;
-        constructor.GetCommandParameters(); /*
-        {
-            { "@__id", 1 }
-            { "@__login", "admin" }
-            { "@__password", "qwerty" }
-            { "@login", "admin" }
-        }
-        */
-        
 
         var ctor = InsertConstructor.CreateFromEntity(items);
         var p = new Dictionary<string, object?>(ctor.GetCommandParameters());

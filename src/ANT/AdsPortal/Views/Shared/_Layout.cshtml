@@ -39,10 +39,10 @@
         </li>
       }
     </ul>
-    @* <form class="form-inline my-2 my-lg-0" action="/Home/Index" method="get"> *@
-    @*   <input class="form-control mr-sm-2" type="search" placeholder="Поиск" name="q" aria-label="Search"> *@
-    @*   <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button> *@
-    @* </form> *@
+    <form class="form-inline my-2 my-lg-0" action="/Home/Index" method="get">
+      <input class="form-control mr-sm-2" type="search" placeholder="Поиск" name="q" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>
+    </form>
   </div>
 </nav>
 @if (ViewData.TryGetValue("ErrorMsg", out var errorMsg))

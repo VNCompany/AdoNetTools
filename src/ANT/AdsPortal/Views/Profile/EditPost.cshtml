@@ -1,0 +1,52 @@
+@model AdsPortal.Models.Post
+@{
+    ViewData["title"] = "Редактировать объявление";
+    var categories = (IEnumerable<(uint, string)>)ViewData["categories"]!;
+    var user = (AdsPortal.Models.User)ViewData["User"]!;
+}
+
+@section Links
+{
+    <link rel="stylesheet" href="~/static/css/create_post.css">
+}
+
+<main>
+    <form method="post" class="new-post-form" enctype="multipart/form-data">
+        <label>
+            Название:<br>
+            <input type="text" name="name" value="@Model.Name" required>
+        </label>
+
+        <label>
+            Категория:<br>
+            <select name="catId" required>
+                @foreach (var (catId, catName) in categories)
+                {
+                    <option value="@catId" 
+                            @if (catId == Model.CatId) 
+                            {
+                                @: selected 
+                            }>@catName</option>
+                }
+            </select>
+        </label>
+
+        <label>
+            Цена:<br>
+            <input type="number" value="@Model.Price" name="price" required>
+        </label>
+
+        <label>Описание:<br>
+            <textarea name="description" style="height: 200px">
+                @Model.Description.Replace("<br>", "&#13;&#10;")
+            </textarea>
+        </label>
+
+        <label>
+            Местонахождение:<br>
+            <input type="text" value="@Model.Location" name="location">
+        </label>
+
+        <input type="submit" value="Сохранить изменения">
+    </form>
+</main>

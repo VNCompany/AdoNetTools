@@ -1,29 +1,56 @@
 @model AdsPortal.Models.Post
 @{
     ViewData["title"] = Model.Name;
-    var user = (AdsPortal.Models.User)ViewData["PostUser"]!; 
+}
+
+@section Links
+{
+    <link rel="stylesheet" type="text/css" href="~/static/css/post.css">
 }
 
 <main style="margin: 10px">
-    <h2>@Model.Name:</h2>
-    <img src="~/content/@Model.PictureFileName" alt="@Model.PictureFileName" style="max-width: 800px; max-height: 350px">
-    <h3>Цена: @Model.Price ₽</h3>
-    <h3>Описание:</h3>
-    <p>
-        @Model.Description
-    </p>
-    <h3>Контакты:</h3>
-    <p>Phone: @user.Phone</p>
-    <p>Email:
-        @if (user.Email != "")
-        {
-            <span>@user.Email</span>
-        }
-        else
-        {
-            <span>Не указан</span>
-        }
-    </p>
-    <h3>Местоположение:</h3>
-    <p>@Model.Location</p>
+    <div id="post">
+        <div id="post-main-block">
+            <h3>@Model.Name</h3>
+            
+            <div class="image-container">
+                <img src="~/content/@Model.MainPicture" alt="@Model.Name">
+            </div>
+
+            @if (Model.Pictures is { Count: > 0 })
+            {
+                <div id="post-images-list">
+                    @foreach (var pictureFileName in Model.Pictures)
+                    {
+                        <i data-orig="/content/@pictureFileName" 
+                           style="background-image: url('/content/@pictureFileName');"></i>
+                    }
+                </div>
+            }
+            <div style="clear: both"></div>
+            <h3 style="margin-top: 20px">Описание:</h3>
+            <p>@Model.Description</p>
+            <h5>Местоположение:</h5>
+            <p>@Model.Location</p>
+        </div>
+
+        <div id="post-sub-block">
+            <h3 style="margin-bottom: 14px">@Model.Price ₽</h3>
+            <h5 style="font-weight: bold; margin-bottom: 20px">@Model.Owner.Name</h5>
+            <p>Телефон: <a href="tel:@Model.Owner.Phone">@Model.Owner.Phone</a></p>
+            <p>Email:
+                <a href="mailto:@Model.Owner.Email">@Model.Owner.Email</a>
+            </p>
+        </div>
+    </div>
 </main>
+
+<script>
+    const icons = document.querySelectorAll("#post-images-list > i");
+    const main_image = document.querySelector("#post-main-block > .image-container > img");
+
+    for (let i = 0; i < icons.length; i++)
+        icons[i].addEventListener("click", function () {
+            main_image.src = this.attributes["data-orig"].value;
+        })
+</script>

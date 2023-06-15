@@ -1,28 +1,21 @@
+using ANT;
+
 namespace AdsPortal.Models;
 
-public class Post
+public class Post : DBEntity
 {
-    public uint Id { get; set; }
+    [DBPrimaryKey] public uint Id { get; set; }
     public uint UserId { get; set; }
     public uint CatId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string Price { get; set; }
-    public string Location { get; set; }
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public string Price { get; set; } = null!;
+    public string Location { get; set; } = null!;
     public DateTime Date { get; set; }
-    public string PictureFileName { get; set; }
 
-    public Post(uint id, uint userId, uint catId, string name, string description, 
-        string price, string location, DateTime date, string pictureFileName)
-    {
-        Id = id;
-        UserId = userId;
-        CatId = catId;
-        Name = name;
-        Description = description;
-        Price = price;
-        Location = location;
-        Date = date;
-        PictureFileName = pictureFileName;
-    }
+    [DBIgnore] public User Owner { get; set; } = null!;
+    [DBIgnore] public List<string>? Pictures { get; set; }
+    [DBIgnore] public string MainPicture => Pictures is { Count: > 0 } ? Pictures[0] : "noimage.jpg";
+
+    public Post() { }
 }
