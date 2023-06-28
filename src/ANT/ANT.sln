@@ -2,13 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{A2DC7A19-710C-40CE-8A8B-0FDBEE39FD1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANT.Model", "ANT.Model\ANT.Model.csproj", "{05250E06-5865-4F96-85BA-33F20E89211A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANT", "ANT\ANT.csproj", "{235CE079-8F49-4986-8007-9BCA9CBF41F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANT.ORM", "ANT.ORM\ANT.ORM.csproj", "{235CE079-8F49-4986-8007-9BCA9CBF41F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANT.Constructors", "ANT.Constructors\ANT.Constructors.csproj", "{F8814E3C-F593-407A-B2C3-553072843497}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdsPortal", "AdsPortal\AdsPortal.csproj", "{F6F72C77-37AE-4037-9285-4009575A41A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +16,6 @@ Global
 		{A2DC7A19-710C-40CE-8A8B-0FDBEE39FD1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2DC7A19-710C-40CE-8A8B-0FDBEE39FD1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2DC7A19-710C-40CE-8A8B-0FDBEE39FD1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05250E06-5865-4F96-85BA-33F20E89211A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05250E06-5865-4F96-85BA-33F20E89211A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05250E06-5865-4F96-85BA-33F20E89211A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05250E06-5865-4F96-85BA-33F20E89211A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{235CE079-8F49-4986-8007-9BCA9CBF41F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{235CE079-8F49-4986-8007-9BCA9CBF41F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{235CE079-8F49-4986-8007-9BCA9CBF41F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -32,9 +24,5 @@ Global
 		{F8814E3C-F593-407A-B2C3-553072843497}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8814E3C-F593-407A-B2C3-553072843497}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8814E3C-F593-407A-B2C3-553072843497}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6F72C77-37AE-4037-9285-4009575A41A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6F72C77-37AE-4037-9285-4009575A41A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6F72C77-37AE-4037-9285-4009575A41A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6F72C77-37AE-4037-9285-4009575A41A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

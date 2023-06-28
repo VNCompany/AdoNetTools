@@ -1,41 +1,33 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
-using ANT.Model;
+using ANT.Constructors.Internal;
 
 namespace ANT.Constructors
 {
     public class MultiQueryConstructor : IQueryConstructor
     {
-        private readonly IEnumerable<IQueryConstructor> _constructors;
+        private readonly List<IQueryConstructor> queries = new();
+        
+        public MultiQueryConstructor() { }
 
-        public string ParametersPrefix { get; set; } = string.Empty;
+        public MultiQueryConstructor(IEnumerable<IQueryConstructor> constructors)
+            => queries.AddRange(constructors);
 
-        public MultiQueryConstructor(IEnumerable<IQueryConstructor> queryConstructors)
+        public MultiQueryConstructor(params IQueryConstructor[] constructors)
+            => queries.AddRange(constructors);
+
+        public void Add(IQueryConstructor constructor) => queries.Add(constructor);
+
+        public string Construct(ConstructorParameters parameters)
         {
-            _constructors = queryConstructors;
+            if (queries.Count == 0) throw new OperationCanceledException("Empty queries set");
+
+            StringBuilder queryBuilder = new StringBuilder();
+            for (int i = 0; i < queries.Count; i++)
+                queryBuilder.Append(queries[i].Construct(parameters.CreateChild($"q{i}_")));
+            return queryBuilder.ToString();
         }
-
-        public MultiQueryConstructor(params IQueryConstructor[] queryConstructors)
-        {
-            _constructors = queryConstructors;
-        }
-
-        public IEnumerable<KeyValuePair<string, object?>> GetCommandParameters()
-        {
-            List<KeyValuePair<string, object?>> result = new List<KeyValuePair<string, object?>>();
-            int prefix = 0;
-            foreach (var constructor in _constructors)
-            {
-                constructor.ParametersPrefix = $"@__c{prefix}_";
-                foreach (var (paramName, paramValue) in constructor.GetCommandParameters())
-                    result.Add(new KeyValuePair<string, object?>(paramName, paramValue));
-                prefix++;
-            }
-
-            return result;
-        }
-
-        public string? Build() => string.Join(";", _constructors.Select(c => c.Build()).Where(q => q != null)) + ";";
     }
 }

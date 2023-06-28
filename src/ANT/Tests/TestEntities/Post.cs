@@ -2,10 +2,12 @@ using ANT.ORM;
 
 namespace Tests.TestEntities;
 
-public class User : DbEntity
+public class Post : DbEntity
 {
     [DbField(IsPrimaryKey = true)]
     public uint Id { get; set; }
-
-    public string Name { get; set; } = null!;
+    
+    public string? Title { get; set; }
+    
+    public uint UserId { get; set; }
 }

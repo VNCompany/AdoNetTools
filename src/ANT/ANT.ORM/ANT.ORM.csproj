@@ -4,10 +4,8 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AssemblyName>ANT.ORM</AssemblyName>
+        <RootNamespace>ANT.ORM</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\ANT.Model\ANT.Model.csproj" />
-    </ItemGroup>
 
 </Project>
